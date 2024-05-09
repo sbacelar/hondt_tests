@@ -1,6 +1,10 @@
 import numpy as np
 
-from src.input_data1 import parties, votes_per_party, seats_per_district, num_districts
+
+import sys 
+import os
+sys.path.append(os.path.relpath("src"))
+from input_data1 import parties, votes_per_party, seats_per_district, num_districts
 
 # Defining input data
 total_votes = np.sum(votes_per_party)  # Total votes
