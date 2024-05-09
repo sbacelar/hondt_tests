@@ -40,5 +40,47 @@ for i, row in df2.iterrows():
 
 print(df2)
 # save df2 as a csv file    
-df2.to_csv('data/mandatos_AR_2024.csv', index=False, sep=';', decimal=',')
+# df2.to_csv('data/mandatos_AR_2024.csv', index=False, sep=';', decimal=',')
 
+# compute the total number of votes for each party  
+total_votes = df2[['ADN', 'BE', 'CH', 'E', 'IL', 'JPP',
+       'L', 'MPTA', 'NC', 'ND', 'PAN', 'PCP-PEV', 'PCTP/MRPP', 'PPD/PSDCDS-PP',
+       'PPD/PSDCDS-PPPPM', 'PPM', 'PS', 'PTP', 'RIR', 'VP']].sum()
+
+# compute percentage of votes for each party    
+percentage_votes_per_party = total_votes / total_votes.sum()
+# Convert series to numpy array.
+percentage_votes_per_party = percentage_votes_per_party.to_numpy() 
+
+# total mandates to be distributed in Continental Portugal
+total_mandates = df2['mandatos'].sum()
+compensation_percentage = 0.1
+compensation_seats = int(np.floor(compensation_percentage * total_mandates))
+print(compensation_seats)
+
+# Function to distribute compensation seats
+def distribute_compensation_seats(percentages, seats):
+    seats_per_party = np.round(percentages * seats)  # Distribute seats based on percentage of votes
+    remaining_seats = int(seats - np.sum(seats_per_party))  # Calculate remaining seats
+    if remaining_seats > 0:
+        # Distribute remaining seats to parties with the highest decimal fractions
+        decimal_fractions = percentages - seats_per_party / seats
+        order = np.argsort(-decimal_fractions)
+        seats_per_party[order[:remaining_seats]] += 1
+    return seats_per_party
+
+# Distributing compensation seats
+compensation_seats_per_party = distribute_compensation_seats(percentage_votes_per_party, compensation_seats)
+
+# show the compensation seats per party in a dataframe with the party names as index    
+compensation_seats_per_party = pd.DataFrame(compensation_seats_per_party, index=total_votes.index)
+# transform compensation_seats_per_party into an integer    
+compensation_seats_per_party = compensation_seats_per_party.astype(int)
+compensation_seats_per_party.columns = ['mandatos'] 
+
+# Results
+print("Compensation Seats per Party:")
+print(compensation_seats_per_party)
+
+# save compensation_seats_per_party as a csv file   
+# compensation_seats_per_party.to_csv('data/mandatos_compensatorios_AR_2024.csv', sep=';', decimal=',')
