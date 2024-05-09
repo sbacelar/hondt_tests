@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+# import sys
 
 def load_and_clean_data(file_path):
     # Load data
@@ -34,16 +35,27 @@ def main():
     # Load and clean data
     file_path = 'data/votos_AR_2024.csv'
     df = load_and_clean_data(file_path)
-    
+
+    # Total mandates and compensation seats
+    total_mandates = df['mandatos'].sum()
+    compensation_percentage = 0.1
+    compensation_seats = int(np.floor(compensation_percentage * total_mandates))
+
+    # use compensation_percentage to calculate the number of compensation seats and subtract it from the total number of seats. Recalculate the new number of seats per party.  
+    total_mandates = total_mandates - compensation_seats
+    # transform the number of mandates by district using the new number of total mandates   
+    df['mandatos'] = np.round(df['mandatos'] * total_mandates / df['mandatos'].sum())
+    # transform df['mandatos'] to int   
+    df['mandatos'] = df['mandatos'].astype(int)
+
+
+
     # Calculate percentage of votes per party
     total_votes = df.drop(columns=['nome do território', 'mandatos']).sum()
     percentage_votes_per_party = total_votes / total_votes.sum()
     percentage_votes_per_party = percentage_votes_per_party.to_numpy()  # Convert to numpy array
     
-    # Total mandates and compensation seats
-    total_mandates = df['mandatos'].sum()
-    compensation_percentage = 0.1
-    compensation_seats = int(np.floor(compensation_percentage * total_mandates))
+
     
     # Distribute compensation seats
     compensation_seats_per_party = distribute_compensation_seats(percentage_votes_per_party, compensation_seats)
@@ -59,5 +71,22 @@ def main():
     # Save results to CSV
     # compensation_seats_df.to_csv('data/mandatos_compensatorios_AR_2024.csv', sep=';', decimal=',')
 
+
 if __name__ == "__main__":
     main()
+
+""" if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python src/hondt6PTr.py <compensation_percentage>")
+        sys.exit(1)
+    
+    compensation_percentage = float(sys.argv[1])
+    main(compensation_percentage) """
+
+
+
+
+
+
+
+
