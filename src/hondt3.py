@@ -1,5 +1,7 @@
 import numpy as np
 
+from src.input_data1 import parties, votes_per_party, seats_per_district, num_districts
+
 # Defining input data
 total_votes = np.sum(votes_per_party)  # Total votes
 percentage_votes_per_party = votes_per_party / total_votes  # Percentage of votes per party
