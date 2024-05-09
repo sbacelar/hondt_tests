@@ -1,0 +1,25 @@
+import numpy as np
+
+# Defining input data
+parties = ["Party A", "Party B", "Party C"]
+votes_per_party = np.array([50000, 30000, 20000])  # Total number of votes per party
+seats_per_district = 5  # Number of seats to be distributed in each electoral district
+num_districts = 10  # Total number of electoral districts
+
+# Function to apply the Hondt method
+def apply_hondt(votes, seats):
+    distribution = np.zeros(len(votes))
+    for _ in range(seats):
+        votes = votes / (distribution + 1)
+        party_winner = np.argmax(votes)
+        distribution[party_winner] += 1
+    return distribution
+
+# Simulating seat distribution in each electoral district
+seats_per_party = np.zeros((len(parties), num_districts))
+for i in range(num_districts):
+    seats_per_party[:, i] = apply_hondt(votes_per_party, seats_per_district)
+
+# Results
+print("Seat Distribution per Electoral District:")
+print(seats_per_party)
