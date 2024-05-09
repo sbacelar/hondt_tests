@@ -26,3 +26,7 @@ print(df2.columns.tolist())
 df3 = df2.iloc[:, [0, 1, 13, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59,
                    62, 65, 68, 71]]
 print(df3)
+
+# save df3 as a csv file    
+df3.to_csv('data/votos_AR_2024.csv', index=False)
+

@@ -27,3 +27,9 @@ for i, row in frame.iterrows():
     frame.loc[i, ['mandates_A', 'mandates_B', 'mandates_C']] = apply_hondt(votes, mandates)
 
 print(frame)
+
+for i, row in frame.iterrows():
+    votes = row[['votes_A', 'votes_B', 'votes_C']].values
+    print(votes)
+    mandates = row['mandates']
+    print(mandates)

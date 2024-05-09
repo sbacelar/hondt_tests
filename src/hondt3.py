@@ -1,8 +1,8 @@
 import numpy as np
 
-
 import sys 
 import os
+
 sys.path.append(os.path.relpath("src"))
 from input_data1 import parties, votes_per_party, seats_per_district, num_districts
 
