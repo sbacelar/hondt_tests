@@ -42,6 +42,12 @@ print(df2)
 # save df2 as a csv file    
 # df2.to_csv('data/mandatos_AR_2024.csv', index=False, sep=';', decimal=',')
 
+# using df2 compute the total number of mandates for each party in Continental Portugal and put them in a new dataframe called df3
+total_mandates_party = df2[['mandatos_ADN', 'mandatos_BE', 'mandatos_CH', 'mandatos_E', 'mandatos_IL', 'mandatos_JPP', 'mandatos_L', 'mandatos_MPTA',
+            'mandatos_NC', 'mandatos_ND', 'mandatos_PAN', 'mandatos_PCP-PEV', 'mandatos_PCTP/MRPP', 'mandatos_PPD/PSDCDS-PP',
+            'mandatos_PPD/PSDCDS-PPPPM', 'mandatos_PPM', 'mandatos_PS', 'mandatos_PTP', 'mandatos_RIR', 'mandatos_VP']].sum(axis=0)    
+print(total_mandates_party)
+
 # compute the total number of votes for each party  
 total_votes = df2[['ADN', 'BE', 'CH', 'E', 'IL', 'JPP',
        'L', 'MPTA', 'NC', 'ND', 'PAN', 'PCP-PEV', 'PCTP/MRPP', 'PPD/PSDCDS-PP',
